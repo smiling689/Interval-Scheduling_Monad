@@ -30,3 +30,5 @@ Makefile.coq.conf
 .DS_Store
 Thumbs.db
 
+# CONFIG文件
+CONFIGURE
