@@ -32,3 +32,10 @@ Thumbs.db
 
 # CONFIG文件
 CONFIGURE
+
+makefile
+
+Makefile
+
+.agentdocs/
+AGENTS.md
