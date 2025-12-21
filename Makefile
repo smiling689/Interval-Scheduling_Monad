@@ -7,12 +7,12 @@ MAXMINLIB_DIR = MaxMinLib
 MONADLIB_DIR = monadlib
 ALGORITHMS_DIR = algorithms
 
-COQBIN=
+COQBIN=/mnt/e/Program/Coq/Coq-Platform~8.20~2025.01/bin/
 
 -include CONFIGURE
 
-COQC=$(COQBIN)coqc$(SUF)
-COQDEP=$(COQBIN)coqdep$(SUF)
+COQC=$(COQBIN)coqc.exe
+COQDEP=$(COQBIN)coqdep.exe
 
 # Compilation flags for different modules
 SETS_FLAG = -R $(SETS_DIR) SetsClass

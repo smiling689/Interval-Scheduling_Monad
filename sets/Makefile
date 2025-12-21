@@ -2,8 +2,8 @@ CURRENT_DIR=.
 
 -include CONFIGURE
 
-COQC=$(COQBIN)coqc$(EXESUF)
-COQDEP=$(COQBIN)coqdep$(EXESUF)
+COQC=$(COQBIN)coqc.exe
+COQDEP=$(COQBIN)coqdep.exe
 
 COQ_FLAG = -Q $(CURRENT_DIR) SetsClass
 DEP_FLAG = -Q $(CURRENT_DIR) SetsClass

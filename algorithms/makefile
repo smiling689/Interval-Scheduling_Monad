@@ -6,12 +6,12 @@ GRAPH_DIR = ../graph_lib
 LISTLIB_DIR = ../Listlib
 MaxMin_DIR = ../MaxMinLib
 
-COQBIN=
+COQBIN=/mnt/e/Program/Coq/Coq-Platform~8.20~2025.01/bin/
 
 -include CONFIGURE
 
-COQC=$(COQBIN)coqc$(EXESUF)
-COQDEP=$(COQBIN)coqdep$(EXESUF)
+COQC=$(COQBIN)coqc.exe
+COQDEP=$(COQBIN)coqdep.exe
 
 COQ_FLAG = -Q $(CURRENT_DIR) Algorithms \
 		-R $(SETS_DIR) SetsClass \

@@ -1,12 +1,12 @@
 CURRENT_DIR=.
 SETS_DIR = ../sets
 
-COQBIN=
+COQBIN=/mnt/e/Program/Coq/Coq-Platform~8.20~2025.01/bin/
 
 -include CONFIGURE
 
-COQC=$(COQBIN)coqc
-COQDEP=$(COQBIN)coqdep
+COQC=$(COQBIN)coqc.exe
+COQDEP=$(COQBIN)coqdep.exe
 
 FP_FLAG = -Q $(CURRENT_DIR) FP -R $(SETS_DIR) SetsClass
 SETS_FLAG = -R $(SETS_DIR) SetsClass

@@ -1,2 +1,2 @@
-COQBIN=/cygdrive/d/Coq-Platform~8.20~2025.01/bin/
+COQBIN=/mnt/e/Program/Coq/Coq-Platform~8.20~2025.01/bin/
 SETS_DIR=../SetsClass
