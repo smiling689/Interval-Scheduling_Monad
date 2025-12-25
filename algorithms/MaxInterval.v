@@ -46,6 +46,7 @@ Definition valid_solution (l: list interval) (leftmost: Z) (ans: list interval):
 (* 子序列相关的基础引理                           *)
 (* --------------------------------------------- *)
 
+(* 左侧连接上新元素，原序列的子序列依然是新序列的子序列 *)
 Lemma is_subsequence_cons_r {A: Type}:
   forall (a: A) l1 l2,
     is_subsequence l1 l2 ->
@@ -57,6 +58,7 @@ Proof.
   - left; exact Hsub.
 Qed.
 
+(* 空序列的子序列为空 *)
 Lemma is_subsequence_nil_inv {A: Type}:
   forall (l: list A),
     is_subsequence l nil ->
@@ -67,6 +69,7 @@ Proof.
   contradiction.
 Qed.
 
+(* 子序列去掉首元素，仍是子序列 *)
 Lemma is_subsequence_drop_head {A: Type}:
   forall (x: A) (xs: list A) (l: list A),
     is_subsequence (x :: xs) l ->
@@ -79,6 +82,7 @@ Proof.
   - apply is_subsequence_cons_r; exact Htail.
 Qed.
 
+(* 子序列与原序列同时去掉首元素，剩余保持子序列关系 *)
 Lemma is_subsequence_tail {A: Type}:
   forall (x: A) (xs: list A) (a: A) (l: list A),
     is_subsequence (x :: xs) (a :: l) ->
@@ -91,6 +95,7 @@ Proof.
   - exact Htail.
 Qed.
 
+(* 子序列首元素与原序列首元素不同，则去除原序列首元素保持子序列关系 *)
 Lemma is_subsequence_cons_skip {A: Type}:
   forall (x: A) (xs: list A) (a: A) (l: list A),
     x <> a ->
@@ -103,11 +108,13 @@ Proof.
   contradiction.
 Qed.
 
+(* 子序列元素出现在原序列 *)
 Lemma is_subsequence_in {A: Type}:
   forall x xs (l: list A),
     is_subsequence (x :: xs) l ->
     In x l.
 Proof.
+  (* Print In. *)
   induction l as [| a l IH]; simpl; intros; try contradiction.
   destruct H as [Hskip | [Heq Htail]].
   - right; apply IH; exact Hskip.
@@ -128,6 +135,7 @@ Proof.
   tauto.
 Qed.
 
+(* 任意可接在已选区间前的区间，右端点小于等于已选区间内任意区间右端点 *)
 Lemma right_increasing_head_le:
   forall a l b,
     right_increasing (a :: l) ->
@@ -141,6 +149,7 @@ Proof.
   apply Hall; exact H0.
 Qed.
 
+(* 任意可接在已选区间前的区间，右端点小于等于总区间的首区间右端点 *)
 Lemma right_increasing_head_le_subseq:
   forall l1 r1 rest l2 r2 ans',
     right_increasing ((l1, r1) :: rest) ->
@@ -151,7 +160,7 @@ Proof.
   pose proof is_subsequence_in _ _ _ Hsub as Hin.
   simpl in Hin.
   destruct Hin as [Heq | Hin].
-  - inversion Heq; subst; apply Z.le_refl.
+  - inversion Heq. reflexivity.
   - pose proof (right_increasing_head_le (l1, r1) rest (l2, r2) Hinc Hin) as Hle.
     simpl in Hle; exact Hle.
 Qed.
@@ -160,6 +169,7 @@ Qed.
 (* 不相交性质的简单推论                           *)
 (* --------------------------------------------- *)
 
+(* 更弱的左侧最大右端点区间仍然保持不相交 *)
 Lemma non_overlap_from_weaken_leftmost:
   forall leftmost leftmost' ans,
     leftmost' <= leftmost ->
@@ -172,6 +182,7 @@ Proof.
   split; [lia | exact Hrest].
 Qed.
 
+(* 已选区间与原序列首区间相交，则不选该首区间 *)
 Lemma valid_solution_skip_head:
   forall leftmost l1 r1 rest ans,
     leftmost >= l1 ->
@@ -194,6 +205,7 @@ Qed.
 (* 贪心选择的纯函数版本与关键性质                 *)
 (* ============================================= *)
 
+(* 贪心选择：l1 > leftmost 就选 *)
 Fixpoint greedy_iter_list (l: list interval) (leftmost: Z) (ans: list interval): list interval :=
   match l with
   | nil => ans
@@ -223,6 +235,7 @@ Proof.
       rewrite app_assoc; reflexivity.
 Qed.
 
+(* 贪心选择单步性质 *)
 Lemma greedy_list_cons:
   forall l1 r1 rest leftmost,
     greedy_list ((l1, r1) :: rest) leftmost =
@@ -234,7 +247,7 @@ Proof.
   unfold greedy_list; simpl.
   destruct (Z_le_dec l1 leftmost) as [Hle | Hgt]; auto.
   rewrite greedy_iter_list_prefix; simpl.
-  unfold greedy_list; simpl; reflexivity.
+  reflexivity.
 Qed.
 
 (* 贪心结果一定是原列表的子序列 *)
@@ -247,7 +260,7 @@ Proof.
   - rewrite greedy_list_cons.
     destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
     + apply is_subsequence_cons_r; apply IH.
-    + simpl. right; split; [reflexivity | apply IH].
+    + right; split; [reflexivity | apply IH].
 Qed.
 
 (* 贪心结果满足严格不相交 *)
@@ -259,8 +272,8 @@ Proof.
   - auto.
   - rewrite greedy_list_cons.
     destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
-    + exact (IH leftmost).
-    + simpl; split; [lia | exact (IH r1)].
+    + apply IH.
+    + simpl; split; [lia | apply IH].
 Qed.
 
 Lemma greedy_list_valid:
@@ -311,9 +324,12 @@ Proof.
     + destruct ans as [| [l0 r0] ans'].
       * simpl; lia.
       * destruct Hvalid as [Hsub Hno].
+        (* 贪心选择区间右端点更小 *)
         pose proof right_increasing_head_le_subseq l1 r1 rest l0 r0 ans' Hinc Hsub as Hle_r.
+        (* 去除首元素，后续答案仍在子序列中 *)
         pose proof (is_subsequence_tail _ _ _ _ Hsub) as Hsub_tail.
         destruct Hno as [_ Htail].
+        (* r1 相比 r0 更弱，因此仍不交 *)
         pose proof (non_overlap_from_weaken_leftmost _ _ _ Hle_r Htail) as Hno_tail.
         pose proof IH r1 (right_increasing_tail _ _ Hinc) ans' (conj Hsub_tail Hno_tail)
           as Hbound.
@@ -388,8 +404,7 @@ Lemma greedy_iter_state_ans:
 Proof.
   induction l as [| [l1 r1] rest IH]; simpl; intros.
   - reflexivity.
-  - unfold greedy_step; simpl.
-    destruct (Z_le_dec l1 leftmost) as [Hle | Hgt]; apply IH.
+  - destruct (Z_le_dec l1 leftmost) as [Hle | Hgt]; apply IH.
 Qed.
 
 (* size 与 ans 长度保持同步 *)
@@ -403,8 +418,7 @@ Proof.
   unfold greedy_step; simpl.
   destruct (Z_le_dec l leftmost0) as [Hle | Hgt].
   - exact Hsize.
-  - simpl.
-    rewrite Z_of_nat_length_snoc.
+  - rewrite Z_of_nat_length_snoc.
     lia.
 Qed.
 
@@ -431,18 +445,18 @@ Proof.
   intros l leftmost.
   unfold greedy_state.
   destruct (greedy_iter_state l (leftmost, 0, [])) as [[leftmost0 size0] ans0] eqn:Hst.
-  simpl.
+  
+  pose proof (greedy_iter_state_ans l leftmost 0 []) as Hans.
+  rewrite Hst in Hans; simpl in Hans.
+  
   split.
   - assert (Hinit: 0 = Z.of_nat (length (@nil interval))) by (simpl; lia).
     pose proof (greedy_iter_state_size l leftmost 0 [] Hinit) as Hsize.
     rewrite Hst in Hsize; simpl in Hsize.
-    pose proof (greedy_iter_state_ans l leftmost 0 []) as Hans.
-    rewrite Hst in Hans; simpl in Hans.
+    
     unfold greedy_size, greedy_list.
     rewrite Hans in Hsize; exact Hsize.
-  - pose proof (greedy_iter_state_ans l leftmost 0 []) as Hans.
-    rewrite Hst in Hans; simpl in Hans.
-    unfold greedy_list; exact Hans.
+  - unfold greedy_list; exact Hans.
 Qed.
 
 Lemma Hoare_max_interval_body:
@@ -456,10 +470,10 @@ Proof.
   apply Hoare_choice.
   - eapply Hoare_assume_bind; intro Hle.
     apply Hoare_ret; intros; subst.
-    destruct (Z_le_dec l leftmost0) as [Hle' | Hgt']; [reflexivity | lia].
+    destruct (Z_le_dec l leftmost0) as [Hle' | Hgt']; [reflexivity | contradiction].
   - eapply Hoare_assume_bind; intro Hgt.
     apply Hoare_ret; intros; subst.
-    destruct (Z_le_dec l leftmost0) as [Hle' | Hgt']; [lia | reflexivity].
+    destruct (Z_le_dec l leftmost0) as [Hle' | Hgt']; [contradiction | reflexivity].
 Qed.
 
 Lemma Hoare_list_iter_state:
@@ -509,21 +523,21 @@ Theorem max_interval_opt_size:
              forall ans',
                valid_solution l leftmost ans' ->
                Z.of_nat (length ans') <= size).
-  Proof.
-    intros l leftmost Hinc.
+Proof.
+  intros l leftmost Hinc.
   apply (@Hoare_conseq
-           ((Z * list (Z * Z))%type)
-           (max_interval l leftmost)
-           (fun '(size, ans) =>
+          ((Z * list (Z * Z))%type)
+          (max_interval l leftmost)
+          (fun '(size, ans) =>
               size = greedy_size l leftmost /\ ans = greedy_list l leftmost)
-           (fun '(size, ans) =>
+          (fun '(size, ans) =>
               forall ans',
                 valid_solution l leftmost ans' ->
                 Z.of_nat (length ans') <= size)).
-  - intros [size ans] [Hsize Hans] ans' Hvalid.
-    subst size ans.
-    apply greedy_list_optimal_size; auto.
-  - apply Hoare_max_interval_state.
+- intros [size ans] [Hsize Hans] ans' Hvalid.
+  subst size ans.
+  apply greedy_list_optimal_size; auto.
+- apply Hoare_max_interval_state.
 Qed.
 
 (* 第三档：最大数量的具体方案正确性 *)
