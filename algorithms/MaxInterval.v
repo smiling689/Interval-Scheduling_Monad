@@ -5,6 +5,9 @@ Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.micromega.Psatz.
 Require Import SetsClass.SetsClass.
 Require Import ListLib.General.IndexedElements.
+Require Import ListLib.General.Forall.
+Require Import ListLib.General.Length.
+Require Import ListLib.Base.Positional.
 From RecordUpdate Require Import RecordUpdate.
 From MonadLib.SetMonad Require Import SetBasic SetHoare FixpointLib.
 From MaxMinLib Require Import MaxMin Interface.
@@ -339,6 +342,331 @@ Proof.
         lia.
 Qed.
 
+
+(* ============================================= *)
+(* 字典序最小性：索引序列与字典序比较             *)
+(* ============================================= *)
+
+Fixpoint lex_lt (l1 l2: list Z): Prop :=
+  match l1, l2 with
+  | nil, nil => False
+  | nil, _ :: _ => True
+  | _ :: _, nil => False
+  | x1 :: t1, x2 :: t2 =>
+      x1 < x2 \/ x1 = x2 /\ lex_lt t1 t2
+  end.
+
+Definition lex_le (l1 l2: list Z): Prop :=
+  l1 = l2 \/ lex_lt l1 l2.
+
+Lemma lex_le_refl:
+  forall l, lex_le l l.
+Proof.
+  intros; left; reflexivity.
+Qed.
+
+Lemma lex_lt_cons_lt:
+  forall x1 x2 t1 t2,
+    x1 < x2 ->
+    lex_lt (x1 :: t1) (x2 :: t2).
+Proof.
+  simpl; intros; auto.
+Qed.
+
+Lemma lex_lt_cons_eq:
+  forall x t1 t2,
+    lex_lt t1 t2 ->
+    lex_lt (x :: t1) (x :: t2).
+Proof.
+  simpl; intros; right; auto.
+Qed.
+
+Lemma lex_le_cons_eq:
+  forall x t1 t2,
+    lex_le t1 t2 ->
+    lex_le (x :: t1) (x :: t2).
+Proof.
+  intros x t1 t2 [Heq | Hlt].
+  - left; subst; reflexivity.
+  - right; apply lex_lt_cons_eq; exact Hlt.
+Qed.
+
+Lemma lex_lt_map_add1:
+  forall l1 l2,
+    lex_lt l1 l2 ->
+    lex_lt (map (fun z => z + 1) l1) (map (fun z => z + 1) l2).
+Proof.
+  induction l1 as [| x1 t1 IH]; destruct l2 as [| x2 t2]; simpl; intros; try tauto.
+  destruct H as [Hlt | [Heq Hlt]].
+  - apply lex_lt_cons_lt. lia.
+  - subst x2.
+    apply lex_lt_cons_eq.
+    apply IH; exact Hlt.
+Qed.
+
+Lemma lex_le_map_add1:
+  forall l1 l2,
+    lex_le l1 l2 ->
+    lex_le (map (fun z => z + 1) l1) (map (fun z => z + 1) l2).
+Proof.
+  intros l1 l2 [Heq | Hlt].
+  - left; subst; reflexivity.
+  - right; apply lex_lt_map_add1; exact Hlt.
+Qed.
+
+(* ============================================= *)
+(* 贪心索引序列及其基础性质                       *)
+(* ============================================= *)
+
+Fixpoint greedy_indices (l: list interval) (leftmost: Z): list Z :=
+  match l with
+  | nil => nil
+  | (l1, r1) :: rest =>
+      if Z_le_dec l1 leftmost
+      then map (fun z => z + 1) (greedy_indices rest leftmost)
+      else 0 :: map (fun z => z + 1) (greedy_indices rest r1)
+  end.
+
+Lemma greedy_indices_cons:
+  forall l1 r1 rest leftmost,
+    greedy_indices ((l1, r1) :: rest) leftmost =
+    if Z_le_dec l1 leftmost
+    then map (fun z => z + 1) (greedy_indices rest leftmost)
+    else 0 :: map (fun z => z + 1) (greedy_indices rest r1).
+Proof.
+  reflexivity.
+Qed.
+
+(* 连续跳过表头时的索引整体加一 *)
+Lemma is_indexed_elements_shift_up {A: Type}:
+  forall (x: A) l il ans,
+    is_indexed_elements l il ans ->
+    is_indexed_elements (x :: l) (map (fun z => z + 1) il) ans.
+Proof.
+  intros x l il ans Hidx.
+  unfold is_indexed_elements in *.
+  apply Forall2_map1.
+  revert Hidx; apply Forall2_impl.
+  intros n a Hnth.
+  apply (Znth_error_Some_cons n); try lia.
+  exact Hnth.
+Qed.
+
+Lemma is_indexed_elements_shift_down {A: Type}:
+  forall (x: A) l il ans,
+    Forall (fun i => 0 < i) il ->
+    is_indexed_elements (x :: l) il ans ->
+    is_indexed_elements l (map (fun z => z - 1) il) ans.
+Proof.
+  intros x l il ans Hpos Hidx.
+  revert Hpos; induction Hidx as [| i a il' ans' Hnth Hrest IH]; intros Hpos.
+  - constructor.
+  - inversion Hpos as [| ? ? Hpos_hd Hpos_tl]; subst.
+    constructor.
+    + assert (Hshift: Znth_error (x :: l) i = Znth_error l (i - 1)) by (apply Znth_error_cons; lia).
+      rewrite Hshift in Hnth.
+      exact Hnth.
+    + apply IH; exact Hpos_tl.
+Qed.
+
+Lemma Forall_add1_pos:
+  forall l,
+    Forall (fun z => 0 <= z) l ->
+    Forall (fun z => 0 < z + 1) l.
+Proof.
+  intros l Hfor.
+  revert Hfor; apply Forall_impl; intros; lia.
+Qed.
+
+Lemma greedy_indices_nonneg:
+  forall l leftmost,
+    Forall (fun z => 0 <= z) (greedy_indices l leftmost).
+Proof.
+  induction l as [| [l1 r1] rest IH]; simpl; intros.
+  - constructor.
+  - destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
+    + rewrite Forall_map.
+      apply Forall_impl with (P := fun z => 0 <= z); [| exact (IH leftmost)].
+      intros; lia.
+    + constructor.
+      * lia.
+      * rewrite Forall_map.
+        apply Forall_impl with (P := fun z => 0 <= z); [| exact (IH r1)].
+        intros; lia.
+Qed.
+
+Lemma greedy_indices_sincr:
+  forall l leftmost,
+    sincr (greedy_indices l leftmost).
+Proof.
+  induction l as [| [l1 r1] rest IH]; simpl; intros.
+  - tauto.
+  - destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
+    + apply sincr_add_1; exact (IH leftmost).
+    + apply sincr_cons.
+      * rewrite Forall_map.
+        apply Forall_add1_pos.
+        apply greedy_indices_nonneg.
+      * apply sincr_add_1; exact (IH r1).
+Qed.
+
+Lemma greedy_indices_indexed:
+  forall l leftmost,
+    is_indexed_elements l (greedy_indices l leftmost) (greedy_list l leftmost).
+Proof.
+  induction l as [| [l1 r1] rest IH]; simpl; intros.
+  - apply is_indexed_elements_nil.
+  - rewrite greedy_list_cons.
+    destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
+    + apply is_indexed_elements_shift_up; apply (IH leftmost).
+    + apply is_indexed_elements_cons.
+      * apply Znth_error_cons_0.
+      * apply is_indexed_elements_shift_up; apply (IH r1).
+Qed.
+
+Lemma sincr_tail:
+  forall a l,
+    sincr (a :: l) ->
+    sincr l.
+Proof.
+  destruct l; simpl; intros; auto.
+  destruct H as [_ Hrest]; exact Hrest.
+Qed.
+
+Lemma greedy_size_cons:
+  forall l1 r1 rest leftmost,
+    greedy_size ((l1, r1) :: rest) leftmost =
+    if Z_le_dec l1 leftmost
+    then greedy_size rest leftmost
+    else greedy_size rest r1 + 1.
+Proof.
+  intros l1 r1 rest leftmost.
+  unfold greedy_size.
+  rewrite greedy_list_cons.
+  destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
+  - reflexivity.
+  - rewrite Z_of_nat_length_cons; lia.
+Qed.
+
+Lemma greedy_size_nonneg:
+  forall l leftmost,
+    0 <= greedy_size l leftmost.
+Proof.
+  intros; unfold greedy_size; lia.
+Qed.
+
+Lemma map_sub_add1_id:
+  forall il,
+    map (fun z => z - 1 + 1) il = il.
+Proof.
+  induction il as [| z il IH]; simpl; [reflexivity |].
+  f_equal; [lia | exact IH].
+Qed.
+
+(* 当表头不可选时，索引列表不包含 0 *)
+Lemma indices_positive_when_skip:
+  forall l1 r1 rest leftmost il ans,
+    l1 <= leftmost ->
+    valid_solution ((l1, r1) :: rest) leftmost ans ->
+    sincr il ->
+    is_indexed_elements ((l1, r1) :: rest) il ans ->
+    Forall (fun i => 0 < i) il.
+Proof.
+  intros l1 r1 rest leftmost il ans Hle Hvalid Hsin Hidx.
+  destruct il as [| i il'].
+  - constructor.
+  - destruct ans as [| a ans'].
+    + apply is_indexed_elements_nil_inv_r in Hidx; discriminate.
+    + destruct a as [la ra].
+      apply is_indexed_elements_cons_iff in Hidx.
+      destruct Hidx as [Hnth Hrest].
+      destruct Hvalid as [_ Hno].
+      simpl in Hno; destruct Hno as [Hlt _].
+      assert (i <> 0).
+      { intro Hzero; subst.
+        rewrite Znth_error_cons_0 in Hnth.
+        inversion Hnth; subst.
+        lia.
+      }
+      pose proof Znth_error_range _ _ _ Hnth as Hrange.
+      assert (0 < i) by lia.
+      pose proof sincr_cons_Forall_lt 0 i il' ltac:(lia) Hsin as Hfor.
+      exact Hfor.
+Qed.
+
+(* 字典序最小性：贪心索引序列在最优解中最小 *)
+Lemma greedy_indices_lex_minimal:
+  forall l leftmost ans' il',
+    right_increasing l ->
+    valid_solution l leftmost ans' ->
+    sincr il' ->
+    is_indexed_elements l il' ans' ->
+    Z.of_nat (length ans') = greedy_size l leftmost ->
+    lex_le (greedy_indices l leftmost) il'.
+Proof.
+  induction l as [| [l1 r1] rest IH]; intros leftmost ans' il' Hinc Hvalid Hsin Hidx Hlen.
+  - destruct Hvalid as [Hsub _].
+    apply is_subsequence_nil_inv in Hsub; subst.
+    apply is_indexed_elements_nil_inv_r in Hidx; subst.
+    apply lex_le_refl.
+  - destruct Hinc as [Hfor Hinc_rest].
+    destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
+    + (* 表头不可选，归约到 rest *)
+      pose proof (valid_solution_skip_head leftmost l1 r1 rest ans' (ltac:(lia)) Hvalid) as Hvalid_rest.
+      pose proof indices_positive_when_skip l1 r1 rest leftmost il' ans' Hle Hvalid Hsin Hidx as Hpos.
+      pose proof is_indexed_elements_shift_down (l1, r1) rest il' ans' Hpos Hidx as Hidx_rest.
+      pose proof sincr_sub_1 _ Hsin as Hsin_rest.
+      assert (Hlen_rest: Z.of_nat (length ans') = greedy_size rest leftmost).
+      { rewrite greedy_size_cons in Hlen.
+        destruct (Z_le_dec l1 leftmost) as [Hle' | Hgt']; [exact Hlen | lia]. }
+      pose proof IH leftmost ans' (map (fun z => z - 1) il') Hinc_rest
+        Hvalid_rest Hsin_rest Hidx_rest Hlen_rest as Hlex.
+      simpl.
+      apply lex_le_map_add1 in Hlex.
+      rewrite map_map in Hlex.
+      rewrite map_sub_add1_id in Hlex.
+      destruct (Z_le_dec l1 leftmost) as [Hle' | Hgt']; [exact Hlex | exfalso; lia].
+    + (* 表头可选，比较首元素索引 *)
+      destruct ans' as [| a ans1].
+      * rewrite greedy_size_cons in Hlen.
+        destruct (Z_le_dec l1 leftmost) as [Hle' | Hgt']; [exfalso; lia |].
+        exfalso.
+        pose proof greedy_size_nonneg rest r1 as Hnn.
+        simpl in Hlen; lia.
+      * destruct il' as [| i il1].
+        { apply is_indexed_elements_nil_inv_l in Hidx; discriminate. }
+        destruct a as [la ra].
+        apply is_indexed_elements_cons_iff in Hidx.
+        destruct Hidx as [Hnth Hidx_tail].
+        destruct Hvalid as [Hsub Hno].
+        simpl in Hno; destruct Hno as [Hlt Htail].
+        destruct (Z_le_gt_dec i 0) as [Hle_i | Hgt_i].
+        -- pose proof Znth_error_range _ _ _ Hnth as Hrange.
+           assert (i = 0) by lia; subst.
+           rewrite Znth_error_cons_0 in Hnth.
+           inversion Hnth; subst la ra.
+           pose proof (sincr_cons_tail_Forall_lt 0 il1 Hsin) as Hpos_tail.
+           pose proof is_indexed_elements_shift_down (l1, r1) rest il1 ans1 Hpos_tail Hidx_tail as Hidx_tail'.
+           pose proof sincr_tail _ _ Hsin as Hsin_tail_raw.
+           pose proof sincr_sub_1 _ Hsin_tail_raw as Hsin_tail.
+           rewrite greedy_size_cons in Hlen.
+           destruct (Z_le_dec l1 leftmost) as [Hle' | Hgt']; [lia |].
+           rewrite Z_of_nat_length_cons in Hlen.
+           assert (Hlen_tail: Z.of_nat (length ans1) = greedy_size rest r1) by lia.
+           pose proof IH r1 ans1 (map (fun z => z - 1) il1) Hinc_rest
+             (conj (is_subsequence_tail _ _ _ _ Hsub) Htail) Hsin_tail Hidx_tail' Hlen_tail as Hlex.
+           rewrite greedy_indices_cons.
+           destruct (Z_le_dec l1 leftmost) as [Hle'' | Hgt'']; [exfalso; lia |].
+           apply lex_le_cons_eq.
+           apply lex_le_map_add1 in Hlex.
+           rewrite map_map in Hlex.
+           rewrite map_sub_add1_id in Hlex.
+           exact Hlex.
+        -- rewrite greedy_indices_cons.
+           destruct (Z_le_dec l1 leftmost) as [Hle'' | Hgt'']; [exfalso; lia |].
+           right; apply lex_lt_cons_lt; lia.
+Qed.
+
 (* ============================================= *)
 (* 程序语义与贪心结果的连接                        *)
 (* ============================================= *)
@@ -574,3 +902,50 @@ Proof.
   - apply Hoare_max_interval_state.
 Qed.
 
+(* 第四档：最优方案中字典序最小的区间编号 *)
+Theorem max_interval_opt_lexicographic:
+  forall l leftmost,
+    right_increasing l ->
+    Hoare (max_interval l leftmost)
+          (fun '(size, ans) =>
+             exists il,
+               sincr il /\
+               is_indexed_elements l il ans /\
+               size = Z.of_nat (length ans) /\
+               (forall ans' il',
+                 valid_solution l leftmost ans' ->
+                 sincr il' ->
+                 is_indexed_elements l il' ans' ->
+                 Z.of_nat (length ans') = size ->
+                 lex_le il il')).
+Proof.
+  intros l leftmost Hinc.
+  apply (@Hoare_conseq
+           ((Z * list (Z * Z))%type)
+           (max_interval l leftmost)
+           (fun '(size, ans) =>
+              size = greedy_size l leftmost /\ ans = greedy_list l leftmost)
+           (fun '(size, ans) =>
+              exists il,
+                sincr il /\
+                is_indexed_elements l il ans /\
+                size = Z.of_nat (length ans) /\
+                (forall ans' il',
+                  valid_solution l leftmost ans' ->
+                  sincr il' ->
+                  is_indexed_elements l il' ans' ->
+                  Z.of_nat (length ans') = size ->
+                  lex_le il il'))).
+  - intros [size ans] [Hsize Hans].
+    subst size ans.
+    exists (greedy_indices l leftmost).
+    split.
+    + apply greedy_indices_sincr.
+    + split.
+      * apply greedy_indices_indexed.
+      * split.
+        { unfold greedy_size; reflexivity. }
+        intros ans' il' Hvalid Hsin Hidx Hlen.
+        apply (greedy_indices_lex_minimal l leftmost ans' il'); auto.
+  - apply Hoare_max_interval_state.
+Qed.
