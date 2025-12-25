@@ -222,7 +222,7 @@ Definition greedy_list (l: list interval) (leftmost: Z): list interval :=
   greedy_iter_list l leftmost [].
 
 Definition greedy_size (l: list interval) (leftmost: Z): Z :=
-  Z.of_nat (length (greedy_list l leftmost)).
+  Zlength (greedy_list l leftmost).
 
 (* 连续选择只会在尾部追加 *)
 Lemma greedy_iter_list_prefix:
@@ -289,34 +289,18 @@ Proof.
   - apply greedy_list_non_overlap.
 Qed.
 
-(* 长度相关的常用化简 *)
-Lemma Z_of_nat_length_cons {A: Type}:
-  forall (a: A) l,
-    Z.of_nat (length (a :: l)) = Z.of_nat (length l) + 1.
-Proof.
-  intros; simpl; lia.
-Qed.
-
-Lemma Z_of_nat_length_snoc {A: Type}:
-  forall (l: list A) a,
-    Z.of_nat (length (l ++ [a])) = Z.of_nat (length l) + 1.
-Proof.
-  intros l a.
-  rewrite length_app; simpl; lia.
-Qed.
-
 (* 贪心长度是最大可行长度（第二档核心结论） *)
 Lemma greedy_list_optimal_size:
   forall l leftmost,
     right_increasing l ->
     forall ans,
       valid_solution l leftmost ans ->
-      Z.of_nat (length ans) <= greedy_size l leftmost.
+      Zlength ans <= greedy_size l leftmost.
 Proof.
   induction l as [| [l1 r1] rest IH]; intros leftmost Hinc ans Hvalid.
   - destruct Hvalid as [Hsub _].
     apply is_subsequence_nil_inv in Hsub; subst.
-    unfold greedy_size; simpl; lia.
+    unfold greedy_size, Zlength; simpl; lia.
   - unfold greedy_size.
     rewrite greedy_list_cons.
     destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
@@ -325,7 +309,7 @@ Proof.
       * apply right_increasing_tail in Hinc; exact Hinc.
       * exact Hvalid.
     + destruct ans as [| [l0 r0] ans'].
-      * simpl; lia.
+      * unfold Zlength; simpl; lia.
       * destruct Hvalid as [Hsub Hno].
         (* 贪心选择区间右端点更小 *)
         pose proof right_increasing_head_le_subseq l1 r1 rest l0 r0 ans' Hinc Hsub as Hle_r.
@@ -337,8 +321,8 @@ Proof.
         pose proof IH r1 (right_increasing_tail _ _ Hinc) ans' (conj Hsub_tail Hno_tail)
           as Hbound.
         unfold greedy_size in Hbound.
-        rewrite Z_of_nat_length_cons.
-        rewrite Z_of_nat_length_cons.
+        rewrite Zlength_cons.
+        rewrite Zlength_cons.
         lia.
 Qed.
 
@@ -536,7 +520,7 @@ Qed.
 Lemma greedy_size_cons:
   forall l1 r1 rest leftmost,
     greedy_size ((l1, r1) :: rest) leftmost =
-    if Z_le_dec l1 leftmost
+    if Z_le_dec l1  leftmost
     then greedy_size rest leftmost
     else greedy_size rest r1 + 1.
 Proof.
@@ -545,14 +529,14 @@ Proof.
   rewrite greedy_list_cons.
   destruct (Z_le_dec l1 leftmost) as [Hle | Hgt].
   - reflexivity.
-  - rewrite Z_of_nat_length_cons; lia.
+  - rewrite Zlength_cons; lia.
 Qed.
 
 Lemma greedy_size_nonneg:
   forall l leftmost,
     0 <= greedy_size l leftmost.
 Proof.
-  intros; unfold greedy_size; lia.
+  intros; unfold greedy_size; apply Zlength_nonneg.
 Qed.
 
 Lemma map_sub_add1_id:
@@ -601,7 +585,7 @@ Lemma greedy_indices_lex_minimal:
     valid_solution l leftmost ans' ->
     sincr il' ->
     is_indexed_elements l il' ans' ->
-    Z.of_nat (length ans') = greedy_size l leftmost ->
+    Zlength ans' = greedy_size l leftmost ->
     lex_le (greedy_indices l leftmost) il'.
 Proof.
   induction l as [| [l1 r1] rest IH]; intros leftmost ans' il' Hinc Hvalid Hsin Hidx Hlen.
@@ -616,7 +600,7 @@ Proof.
       pose proof indices_positive_when_skip l1 r1 rest leftmost il' ans' Hle Hvalid Hsin Hidx as Hpos.
       pose proof is_indexed_elements_shift_down (l1, r1) rest il' ans' Hpos Hidx as Hidx_rest.
       pose proof sincr_sub_1 _ Hsin as Hsin_rest.
-      assert (Hlen_rest: Z.of_nat (length ans') = greedy_size rest leftmost).
+      assert (Hlen_rest: Zlength ans' = greedy_size rest leftmost).
       { rewrite greedy_size_cons in Hlen.
         destruct (Z_le_dec l1 leftmost) as [Hle' | Hgt']; [exact Hlen | lia]. }
       pose proof IH leftmost ans' (map (fun z => z - 1) il') Hinc_rest
@@ -632,7 +616,8 @@ Proof.
         destruct (Z_le_dec l1 leftmost) as [Hle' | Hgt']; [exfalso; lia |].
         exfalso.
         pose proof greedy_size_nonneg rest r1 as Hnn.
-        simpl in Hlen; lia.
+        unfold Zlength in Hlen; simpl in Hlen.
+        lia.
       * destruct il' as [| i il1].
         { apply is_indexed_elements_nil_inv_l in Hidx; discriminate. }
         destruct a as [la ra].
@@ -651,8 +636,8 @@ Proof.
            pose proof sincr_sub_1 _ Hsin_tail_raw as Hsin_tail.
            rewrite greedy_size_cons in Hlen.
            destruct (Z_le_dec l1 leftmost) as [Hle' | Hgt']; [lia |].
-           rewrite Z_of_nat_length_cons in Hlen.
-           assert (Hlen_tail: Z.of_nat (length ans1) = greedy_size rest r1) by lia.
+           rewrite Zlength_cons in Hlen.
+           assert (Hlen_tail: Zlength ans1 = greedy_size rest r1) by lia.
            pose proof IH r1 ans1 (map (fun z => z - 1) il1) Hinc_rest
              (conj (is_subsequence_tail _ _ _ _ Hsub) Htail) Hsin_tail Hidx_tail' Hlen_tail as Hlex.
            rewrite greedy_indices_cons.
@@ -738,23 +723,23 @@ Qed.
 (* size 与 ans 长度保持同步 *)
 Lemma greedy_step_size_inv:
   forall it leftmost0 size0 ans0,
-    size0 = Z.of_nat (length ans0) ->
+    size0 = Zlength ans0 ->
     let '(_, size1, ans1) := greedy_step it (leftmost0, size0, ans0) in
-    size1 = Z.of_nat (length ans1).
+    size1 = Zlength ans1.
 Proof.
   intros [l r] leftmost0 size0 ans0 Hsize.
   unfold greedy_step; simpl.
   destruct (Z_le_dec l leftmost0) as [Hle | Hgt].
   - exact Hsize.
-  - rewrite Z_of_nat_length_snoc.
+  - rewrite Zlength_app_cons.
     lia.
 Qed.
 
 Lemma greedy_iter_state_size:
   forall l leftmost size ans,
-    size = Z.of_nat (length ans) ->
+    size = Zlength ans ->
     let '(_, size', ans') := greedy_iter_state l (leftmost, size, ans) in
-    size' = Z.of_nat (length ans').
+    size' = Zlength ans'.
 Proof.
   induction l as [| it rest IH]; simpl; intros.
   - exact H.
@@ -778,7 +763,7 @@ Proof.
   rewrite Hst in Hans; simpl in Hans.
   
   split.
-  - assert (Hinit: 0 = Z.of_nat (length (@nil interval))) by (simpl; lia).
+  - assert (Hinit: 0 = Zlength (@nil interval)) by (simpl; reflexivity).
     pose proof (greedy_iter_state_size l leftmost 0 [] Hinit) as Hsize.
     rewrite Hst in Hsize; simpl in Hsize.
     
@@ -850,7 +835,7 @@ Theorem max_interval_opt_size:
           (fun '(size, ans) =>
              forall ans',
                valid_solution l leftmost ans' ->
-               Z.of_nat (length ans') <= size).
+               Zlength ans' <= size).
 Proof.
   intros l leftmost Hinc.
   apply (@Hoare_conseq
@@ -861,7 +846,7 @@ Proof.
           (fun '(size, ans) =>
               forall ans',
                 valid_solution l leftmost ans' ->
-                Z.of_nat (length ans') <= size)).
+              Zlength ans' <= size)).
 - intros [size ans] [Hsize Hans] ans' Hvalid.
   subst size ans.
   apply greedy_list_optimal_size; auto.
@@ -875,10 +860,10 @@ Theorem max_interval_opt_solution:
     Hoare (max_interval l leftmost)
           (fun '(size, ans) =>
              valid_solution l leftmost ans /\
-             size = Z.of_nat (length ans) /\
+             size = Zlength ans /\
              (forall ans',
                valid_solution l leftmost ans' ->
-               Z.of_nat (length ans') <= size)).
+               Zlength ans' <= size)).
 Proof.
   intros l leftmost Hinc.
   apply (@Hoare_conseq
@@ -888,10 +873,10 @@ Proof.
               size = greedy_size l leftmost /\ ans = greedy_list l leftmost)
            (fun '(size, ans) =>
               valid_solution l leftmost ans /\
-              size = Z.of_nat (length ans) /\
-              (forall ans',
-                valid_solution l leftmost ans' ->
-                Z.of_nat (length ans') <= size))).
+             size = Zlength ans /\
+             (forall ans',
+               valid_solution l leftmost ans' ->
+               Zlength ans' <= size))).
   - intros [size ans] [Hsize Hans].
     subst size ans.
     split.
@@ -911,13 +896,13 @@ Theorem max_interval_opt_lexicographic:
              exists il,
                sincr il /\
                is_indexed_elements l il ans /\
-               size = Z.of_nat (length ans) /\
-               (forall ans' il',
-                 valid_solution l leftmost ans' ->
-                 sincr il' ->
-                 is_indexed_elements l il' ans' ->
-                 Z.of_nat (length ans') = size ->
-                 lex_le il il')).
+                size = Zlength ans /\
+                (forall ans' il',
+                  valid_solution l leftmost ans' ->
+                  sincr il' ->
+                  is_indexed_elements l il' ans' ->
+                  Zlength ans' = size ->
+                  lex_le il il')).
 Proof.
   intros l leftmost Hinc.
   apply (@Hoare_conseq
@@ -929,12 +914,12 @@ Proof.
               exists il,
                 sincr il /\
                 is_indexed_elements l il ans /\
-                size = Z.of_nat (length ans) /\
+                size = Zlength ans /\
                 (forall ans' il',
                   valid_solution l leftmost ans' ->
                   sincr il' ->
                   is_indexed_elements l il' ans' ->
-                  Z.of_nat (length ans') = size ->
+                  Zlength ans' = size ->
                   lex_le il il'))).
   - intros [size ans] [Hsize Hans].
     subst size ans.
