@@ -31,7 +31,7 @@ Makefile.coq.conf
 Thumbs.db
 
 # CONFIG文件
-CONFIGURE
+**/CONFIGURE
 
 makefile
 
