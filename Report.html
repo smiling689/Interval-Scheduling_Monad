@@ -1,0 +1,586 @@
+<!DOCTYPE html><html><head>
+      <title>Report</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\azure\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.19\crossnote\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      
+<h1 id="基于monad的区间选择贪心算法正确性证明说明文档">基于Monad的区间选择贪心算法正确性证明说明文档 </h1>
+<h2 id="〇-完成进度概述">〇、完成进度概述 </h2>
+<p>完全完成第二档、第三档难度，第四档难度在 AI 辅助下完成。</p>
+<h2 id="一-算法概述">一、算法概述 </h2>
+<p>完成对一个基于贪心策略的区间选择算法进行形式化证明，该算法输入<strong>右端点递增</strong>的闭区间序列，输出一组两两不相交的区间，需证明：</p>
+<ol>
+<li>算法输出的区间数量是所有可行解中的最大值（第二档）；</li>
+<li>算法输出的具体区间集合是数量最大的可行解（第三档）；</li>
+<li>该区间集合是所有最优解中<strong>区间编号字典序最小</strong>的方案（第四档）。</li>
+</ol>
+<p>算法核心逻辑为：从指定左端点 <code>leftmost</code> 开始遍历区间，若当前区间左端点大于 <code>leftmost</code> 则选择该区间（更新 <code>leftmost</code> 为当前区间右端点），否则跳过，最终返回选中的区间数量和集合。</p>
+<h2 id="二-核心定义与基础性质">二、核心定义与基础性质 </h2>
+<h3 id="21-基础概念定义">2.1 基础概念定义 </h3>
+<table>
+<thead>
+<tr>
+<th>定义名称</th>
+<th>数学含义</th>
+<th>关键说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>interval</code></td>
+<td><code>Z * Z</code></td>
+<td>闭区间类型，<code>left(it)</code>取左端点，<code>right(it)</code>取右端点</td>
+</tr>
+<tr>
+<td><code>right_increasing l</code></td>
+<td>区间序列<code>l</code>的右端点非递减</td>
+<td>算法输入的前提条件，保证贪心策略有效性</td>
+</tr>
+<tr>
+<td><code>non_overlap_from leftmost ans</code></td>
+<td>序列<code>ans</code>中区间两两不交且均严格在<code>leftmost</code>右侧</td>
+<td>可行解的核心约束（严格不交：左端点&gt;前一区间右端点）</td>
+</tr>
+<tr>
+<td><code>valid_solution l leftmost ans</code></td>
+<td><code>ans</code>是<code>l</code>的子序列 ∧ <code>non_overlap_from leftmost ans</code></td>
+<td>合法解的完整定义（子序列保证区间来自原序列）</td>
+</tr>
+<tr>
+<td><code>greedy_list l leftmost</code></td>
+<td>贪心算法的纯函数实现</td>
+<td>遍历<code>l</code>，按规则选择区间并返回选中集合</td>
+</tr>
+<tr>
+<td><code>greedy_size l leftmost</code></td>
+<td><code>Zlength (greedy_list l leftmost)</code></td>
+<td>贪心解的区间数量</td>
+</tr>
+<tr>
+<td><code>lex_lt l1 l2</code></td>
+<td>整数序列<code>l1</code>字典序小于<code>l2</code></td>
+<td>用于比较区间编号的优先级</td>
+</tr>
+<tr>
+<td><code>greedy_indices l leftmost</code></td>
+<td>贪心选中区间在原序列中的索引序列</td>
+<td>索引从0开始，用于字典序证明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-关键基础引理">2.2 关键基础引理 </h3>
+<h4 id="1子序列性质">（1）子序列性质 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_subsequence_cons_r</code></td>
+<td>原序列头部追加元素，不改变其子序列关系</td>
+<td>证明跳过原序列首元素时，子序列关系仍成立</td>
+</tr>
+<tr>
+<td><code>is_subsequence_nil_inv</code></td>
+<td>空序列的子序列只能是空序列</td>
+<td>归纳法基例中证明解的唯一性</td>
+</tr>
+<tr>
+<td><code>is_subsequence_drop_head</code></td>
+<td>子序列去掉首元素，仍是原序列的子序列</td>
+<td>拆分最优解首元素后，后续子序列仍合法</td>
+</tr>
+<tr>
+<td><code>is_subsequence_tail</code></td>
+<td>子序列与原序列同时去掉首元素，剩余保持子序列关系</td>
+<td>归约最优解后续子序列的合法性证明</td>
+</tr>
+<tr>
+<td><code>is_subsequence_cons_skip</code></td>
+<td>子序列首元素与原序列首元素不同时，可跳过原序列首元素</td>
+<td>证明首区间不可选时，最优解必不包含该区间</td>
+</tr>
+<tr>
+<td><code>is_subsequence_in</code></td>
+<td>子序列元素必出现在原序列中</td>
+<td>结合右端点有序性质推导区间右端点大小关系</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2右端点有序性质">（2）右端点有序性质 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>right_increasing_tail</code></td>
+<td>右端点递增序列的尾部仍保持右端点递增</td>
+<td>归纳法中归约到子序列的有序性证明</td>
+</tr>
+<tr>
+<td><code>right_increasing_head_le</code></td>
+<td>右端点递增序列中，首区间右端点≤后续所有区间右端点</td>
+<td>推导最优解首区间右端点≥贪心选择区间的右端点</td>
+</tr>
+<tr>
+<td><code>right_increasing_head_le_subseq</code></td>
+<td>子序列中任意区间的右端点≥原序列首区间右端点</td>
+<td>核心用于证明贪心选择的区间右端点更小，保留更多选择空间</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3不相交性质">（3）不相交性质 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>non_overlap_from_weaken_leftmost</code></td>
+<td>若<code>leftmost' ≤ leftmost</code>且<code>ans</code>在<code>leftmost</code>右侧不交，则在<code>leftmost'</code>右侧也不交</td>
+<td>证明最优解后续子序列在贪心选择区间的右端点右侧仍合法</td>
+</tr>
+<tr>
+<td><code>valid_solution_skip_head</code></td>
+<td>原序列首区间与<code>leftmost</code>相交时，合法解必不包含该区间</td>
+<td>归纳法中处理首区间不可选的情况</td>
+</tr>
+</tbody>
+</table>
+<h2 id="三-贪心算法正确性证明第二档">三、贪心算法正确性证明（第二档） </h2>
+<h3 id="31-证明思路">3.1 证明思路 </h3>
+<p>核心目标：证明<code>greedy_size l leftmost</code>是所有合法解的最大长度，即<br>
+<code>∀ ans, valid_solution l leftmost ans → Zlength ans ≤ greedy_size l leftmost</code></p>
+<p>采用<strong>数学归纳法</strong>，按原序列<code>l</code>的结构归纳：</p>
+<ol>
+<li><strong>基例</strong>：<code>l = nil</code>时，唯一合法解是空序列，长度为0，贪心解长度也为0，不等式成立；</li>
+<li><strong>归纳步</strong>：假设<code>l = (l1, r1) :: rest</code>，分两种情况：
+<ul>
+<li>若<code>l1 ≤ leftmost</code>：首区间不可选，合法解必是<code>rest</code>的合法解，由归纳假设得证；</li>
+<li>若<code>l1 &gt; leftmost</code>：贪心选择首区间，此时任意合法解<code>ans</code>若非空，其首区间右端点≥<code>r1</code>，后续子序列长度≤贪心解后续长度，整体长度≤贪心解长度。</li>
+</ul>
+</li>
+</ol>
+<h3 id="32-核心定理">3.2 核心定理 </h3>
+<pre data-role="codeBlock" data-info="coq" class="language-coq coq"><code><span class="token keyword keyword-Lemma">Lemma</span> greedy_list_optimal_size<span class="token punctuation">:</span>
+  <span class="token keyword keyword-forall">forall</span> l leftmost<span class="token punctuation">,</span>
+    right_increasing l <span class="token operator">-&gt;</span>
+    <span class="token keyword keyword-forall">forall</span> ans<span class="token punctuation">,</span>
+      valid_solution l leftmost ans <span class="token operator">-&gt;</span>
+      Zlength ans <span class="token operator">&lt;=</span> greedy_size l leftmost<span class="token punctuation">.</span>
+</code></pre><h3 id="33-支撑引理第二档专属">3.3 支撑引理（第二档专属） </h3>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>greedy_iter_list_prefix</code></td>
+<td>贪心迭代的结果等于初始空列表的结果追加到输入ans后</td>
+<td>证明<code>greedy_list</code>的递归展开式（<code>greedy_list_cons</code>）</td>
+</tr>
+<tr>
+<td><code>greedy_list_cons</code></td>
+<td>贪心列表的递归展开式：首区间可选则加入，否则递归处理剩余</td>
+<td>归纳法中拆分贪心解的结构</td>
+</tr>
+<tr>
+<td><code>greedy_list_subsequence</code></td>
+<td>贪心解是原序列的子序列</td>
+<td>证明贪心解本身是合法解的前提</td>
+</tr>
+<tr>
+<td><code>greedy_list_non_overlap</code></td>
+<td>贪心解满足严格不交约束</td>
+<td>证明贪心解本身是合法解的前提</td>
+</tr>
+<tr>
+<td><code>greedy_list_valid</code></td>
+<td>贪心解是合法解（结合上述两个引理）</td>
+<td>第三档证明的核心前提</td>
+</tr>
+<tr>
+<td><code>greedy_size_cons</code></td>
+<td>贪心长度的递归展开式：首区间可选则长度+1，否则等于剩余长度</td>
+<td>归纳法中计算贪心解长度</td>
+</tr>
+<tr>
+<td><code>greedy_size_nonneg</code></td>
+<td>贪心长度非负</td>
+<td>字典序证明中处理长度相等的约束</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-关键步骤">3.4 关键步骤 </h3>
+<ul>
+<li>拆分合法解<code>ans</code>为<code>(l0, r0) :: ans'</code>，利用<code>right_increasing_head_le_subseq</code>得<code>r1 ≤ r0</code>；</li>
+<li>由<code>non_overlap_from_weaken_leftmost</code>得<code>ans'</code>在<code>r1</code>右侧合法；</li>
+<li>结合归纳假设<code>Zlength ans' ≤ greedy_size rest r1</code>，推导出<code>Zlength ans ≤ greedy_size l leftmost</code>。</li>
+</ul>
+<h2 id="四-最优方案正确性证明第三档">四、最优方案正确性证明（第三档） </h2>
+<h3 id="41-证明思路">4.1 证明思路 </h3>
+<p>在第二档基础上，需额外证明：</p>
+<ol>
+<li>贪心解本身是合法解（<code>valid_solution l leftmost (greedy_list l leftmost)</code>）；</li>
+<li>贪心解的长度等于<code>greedy_size l leftmost</code>；</li>
+<li>Monad实现的算法输出与纯函数贪心解等价。</li>
+</ol>
+<h3 id="42-核心定理">4.2 核心定理 </h3>
+<pre data-role="codeBlock" data-info="coq" class="language-coq coq"><code><span class="token keyword keyword-Theorem">Theorem</span> max_interval_opt_solution<span class="token punctuation">:</span>
+  <span class="token keyword keyword-forall">forall</span> l leftmost<span class="token punctuation">,</span>
+    right_increasing l <span class="token operator">-&gt;</span>
+    Hoare <span class="token punctuation">(</span>max_interval l leftmost<span class="token punctuation">)</span>
+          <span class="token punctuation">(</span><span class="token keyword keyword-fun">fun</span> <span class="token operator">'</span><span class="token punctuation">(</span>size<span class="token punctuation">,</span> ans<span class="token punctuation">)</span> <span class="token operator">=&gt;</span>
+             valid_solution l leftmost ans <span class="token operator">/\</span>
+             size <span class="token operator">=</span> Zlength ans <span class="token operator">/\</span>
+             <span class="token punctuation">(</span><span class="token keyword keyword-forall">forall</span> ans<span class="token operator">'</span><span class="token punctuation">,</span>
+               valid_solution l leftmost ans<span class="token operator">'</span> <span class="token operator">-&gt;</span>
+               Zlength ans<span class="token operator">'</span> <span class="token operator">&lt;=</span> size<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+</code></pre><h3 id="43-支撑引理第三档专属">4.3 支撑引理（第三档专属） </h3>
+<h4 id="1monad与纯函数等价性相关">（1）Monad与纯函数等价性相关 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>greedy_step_size_inv</code></td>
+<td>贪心状态单步更新后，size仍等于ans的长度</td>
+<td>保证状态迭代中size的正确性</td>
+</tr>
+<tr>
+<td><code>greedy_iter_state_snoc</code></td>
+<td>贪心状态迭代在列表末尾追加元素等于单步更新</td>
+<td>证明状态迭代的递归正确性</td>
+</tr>
+<tr>
+<td><code>greedy_iter_state_ans</code></td>
+<td>状态迭代的ans结果与纯函数<code>greedy_iter_list</code>一致</td>
+<td>连接状态迭代与纯函数贪心解</td>
+</tr>
+<tr>
+<td><code>greedy_iter_state_size</code></td>
+<td>状态迭代中size始终等于ans的长度</td>
+<td>保证最终输出size的正确性</td>
+</tr>
+<tr>
+<td><code>greedy_state_result</code></td>
+<td>初始状态的贪心迭代结果等于纯函数贪心解</td>
+<td>核心等价性引理</td>
+</tr>
+<tr>
+<td><code>Hoare_max_interval_body</code></td>
+<td>Monad单步选择与<code>greedy_step</code>等价</td>
+<td>连接Monad单步操作与纯函数</td>
+</tr>
+<tr>
+<td><code>Hoare_list_iter_state</code></td>
+<td>Monad列表迭代与<code>greedy_iter_state</code>等价</td>
+<td>连接Monad迭代与纯函数状态迭代</td>
+</tr>
+<tr>
+<td><code>Hoare_max_interval_state</code></td>
+<td>Monad算法输出与纯函数贪心解等价</td>
+<td>第三档证明的核心等价性定理</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2合法性相关">（2）合法性相关 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_interval_opt_size</code></td>
+<td>Monad算法输出的size是所有合法解的最大值</td>
+<td>第二档结论的Monad版本</td>
+</tr>
+</tbody>
+</table>
+<h2 id="五-字典序最小性证明第四档">五、字典序最小性证明（第四档） </h2>
+<h3 id="51-证明思路">5.1 证明思路 </h3>
+<p>核心目标：贪心解的索引序列<code>greedy_indices l leftmost</code>是所有最优解索引序列中字典序最小的，即<br>
+<code>∀ ans' il', (valid_solution l leftmost ans' ∧ sincr il' ∧ is_indexed_elements l il' ans' ∧ Zlength ans' = greedy_size l leftmost) → lex_le (greedy_indices l leftmost) il'</code></p>
+<p><strong>关键概念</strong>：</p>
+<ul>
+<li><code>sincr il</code>：索引序列严格递增（保证区间按原序列顺序选择）；</li>
+<li><code>is_indexed_elements l il ans</code>：<code>ans</code>是<code>l</code>中索引为<code>il</code>的元素组成的序列。</li>
+</ul>
+<h3 id="52-核心定理">5.2 核心定理 </h3>
+<pre data-role="codeBlock" data-info="coq" class="language-coq coq"><code><span class="token keyword keyword-Lemma">Lemma</span> greedy_indices_lex_minimal<span class="token punctuation">:</span>
+  <span class="token keyword keyword-forall">forall</span> l leftmost ans<span class="token operator">'</span> il<span class="token operator">'</span><span class="token punctuation">,</span>
+    right_increasing l <span class="token operator">-&gt;</span>
+    valid_solution l leftmost ans<span class="token operator">'</span> <span class="token operator">-&gt;</span>
+    sincr il<span class="token operator">'</span> <span class="token operator">-&gt;</span>
+    is_indexed_elements l il<span class="token operator">'</span> ans<span class="token operator">'</span> <span class="token operator">-&gt;</span>
+    Zlength ans<span class="token operator">'</span> <span class="token operator">=</span> greedy_size l leftmost <span class="token operator">-&gt;</span>
+    lex_le <span class="token punctuation">(</span>greedy_indices l leftmost<span class="token punctuation">)</span> il<span class="token operator">'</span><span class="token punctuation">.</span>
+</code></pre><h3 id="53-支撑引理第四档专属">5.3 支撑引理（第四档专属） </h3>
+<h4 id="1字典序基础性质">（1）字典序基础性质 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lex_le_refl</code></td>
+<td>字典序具有自反性</td>
+<td>基例中证明空序列的字典序最小</td>
+</tr>
+<tr>
+<td><code>lex_lt_cons_lt</code></td>
+<td>首元素更小则字典序更小</td>
+<td>证明贪心索引序列首元素0小于任意正整数</td>
+</tr>
+<tr>
+<td><code>lex_lt_cons_eq</code></td>
+<td>首元素相等时，后续序列字典序更小则整体更小</td>
+<td>归约到后续索引序列的字典序证明</td>
+</tr>
+<tr>
+<td><code>lex_le_cons_eq</code></td>
+<td>首元素相等时，后续序列字典序更小/相等则整体更小</td>
+<td>字典序最小性的递归证明</td>
+</tr>
+<tr>
+<td><code>lex_lt_map_add1</code></td>
+<td>索引序列全+1后字典序关系保持</td>
+<td>处理首区间不可选时的索引偏移</td>
+</tr>
+<tr>
+<td><code>lex_le_map_add1</code></td>
+<td>索引序列全+1后字典序≤关系保持</td>
+<td>索引偏移后的字典序证明</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2贪心索引序列性质">（2）贪心索引序列性质 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>greedy_indices_cons</code></td>
+<td>贪心索引序列的递归展开式</td>
+<td>归纳法中拆分索引序列结构</td>
+</tr>
+<tr>
+<td><code>greedy_indices_nonneg</code></td>
+<td>贪心索引序列所有索引非负</td>
+<td>保证索引的合法性</td>
+</tr>
+<tr>
+<td><code>greedy_indices_sincr</code></td>
+<td>贪心索引序列严格递增</td>
+<td>证明贪心索引序列是合法的索引序列</td>
+</tr>
+<tr>
+<td><code>greedy_indices_indexed</code></td>
+<td>贪心索引序列对应原序列中的贪心解</td>
+<td>连接索引序列与贪心解</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3索引偏移性质">（3）索引偏移性质 </h4>
+<table>
+<thead>
+<tr>
+<th>引理名称</th>
+<th>核心含义</th>
+<th>关键作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_indexed_elements_shift_up</code></td>
+<td>原序列头部追加元素后，索引+1仍指向同一元素</td>
+<td>处理首区间不可选时的索引偏移</td>
+</tr>
+<tr>
+<td><code>is_indexed_elements_shift_down</code></td>
+<td>原序列头部元素跳过且索引全为正，索引-1仍指向同一元素</td>
+<td>归约到剩余序列的索引证明</td>
+</tr>
+<tr>
+<td><code>Forall_add1_pos</code></td>
+<td>非负索引+1后全为正</td>
+<td>证明索引偏移后的正性</td>
+</tr>
+<tr>
+<td><code>indices_positive_when_skip</code></td>
+<td>首区间不可选时，最优解索引序列全为正</td>
+<td>应用<code>shift_down</code>的前提条件</td>
+</tr>
+<tr>
+<td><code>sincr_tail</code></td>
+<td>严格递增序列的尾部仍严格递增</td>
+<td>拆分索引序列后的单调性证明</td>
+</tr>
+<tr>
+<td><code>map_sub_add1_id</code></td>
+<td>索引先-1后+1等于原序列</td>
+<td>索引偏移后的还原</td>
+</tr>
+</tbody>
+</table>
+<h3 id="54-关键步骤">5.4 关键步骤 </h3>
+<ol>
+<li>若首区间不可选（<code>l1 ≤ leftmost</code>），则最优解索引序列无0，归约到<code>rest</code>的索引序列（整体+1）；</li>
+<li>若首区间可选（<code>l1 &gt; leftmost</code>）：
+<ul>
+<li>若最优解索引序列首元素为0：与贪心索引序列首元素相同，归约到后续索引序列；</li>
+<li>若最优解索引序列首元素&gt;0：贪心索引序列字典序更小（首元素0 &lt; 任意正整数）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="55-算法层面的字典序保证">5.5 算法层面的字典序保证 </h3>
+<pre data-role="codeBlock" data-info="coq" class="language-coq coq"><code><span class="token keyword keyword-Theorem">Theorem</span> max_interval_opt_lexicographic<span class="token punctuation">:</span>
+  <span class="token keyword keyword-forall">forall</span> l leftmost<span class="token punctuation">,</span>
+    right_increasing l <span class="token operator">-&gt;</span>
+    Hoare <span class="token punctuation">(</span>max_interval l leftmost<span class="token punctuation">)</span>
+          <span class="token punctuation">(</span><span class="token keyword keyword-fun">fun</span> <span class="token operator">'</span><span class="token punctuation">(</span>size<span class="token punctuation">,</span> ans<span class="token punctuation">)</span> <span class="token operator">=&gt;</span>
+             <span class="token keyword keyword-exists">exists</span> il<span class="token punctuation">,</span>
+               sincr il <span class="token operator">/\</span>
+               is_indexed_elements l il ans <span class="token operator">/\</span>
+                size <span class="token operator">=</span> Zlength ans <span class="token operator">/\</span>
+                <span class="token punctuation">(</span><span class="token keyword keyword-forall">forall</span> ans<span class="token operator">'</span> il<span class="token operator">'</span><span class="token punctuation">,</span>
+                  valid_solution l leftmost ans<span class="token operator">'</span> <span class="token operator">-&gt;</span>
+                  sincr il<span class="token operator">'</span> <span class="token operator">-&gt;</span>
+                  is_indexed_elements l il<span class="token operator">'</span> ans<span class="token operator">'</span> <span class="token operator">-&gt;</span>
+                  Zlength ans<span class="token operator">'</span> <span class="token operator">=</span> size <span class="token operator">-&gt;</span>
+                  lex_le il il<span class="token operator">'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+</code></pre><h2 id="六-monad程序与纯函数的等价性">六、Monad程序与纯函数的等价性 </h2>
+<h3 id="61-核心映射关系">6.1 核心映射关系 </h3>
+<p>为连接算法的Monad实现与纯函数贪心解，定义：</p>
+<ul>
+<li><code>greedy_step</code>：单步贪心选择的状态转换函数；</li>
+<li><code>greedy_iter_state</code>：状态迭代的纯函数实现；</li>
+<li><code>greedy_state</code>：初始状态下的迭代结果。</li>
+</ul>
+<h3 id="62-等价性定理">6.2 等价性定理 </h3>
+<pre data-role="codeBlock" data-info="coq" class="language-coq coq"><code><span class="token keyword keyword-Lemma">Lemma</span> Hoare_max_interval_state<span class="token punctuation">:</span>
+  <span class="token keyword keyword-forall">forall</span> l leftmost<span class="token punctuation">,</span>
+    Hoare <span class="token punctuation">(</span>max_interval l leftmost<span class="token punctuation">)</span>
+          <span class="token punctuation">(</span><span class="token keyword keyword-fun">fun</span> <span class="token operator">'</span><span class="token punctuation">(</span>size<span class="token punctuation">,</span> ans<span class="token punctuation">)</span> <span class="token operator">=&gt;</span>
+             size <span class="token operator">=</span> greedy_size l leftmost <span class="token operator">/\</span>
+             ans <span class="token operator">=</span> greedy_list l leftmost<span class="token punctuation">)</span><span class="token punctuation">.</span>
+</code></pre><h3 id="63-证明核心">6.3 证明核心 </h3>
+<ol>
+<li><code>Hoare_max_interval_body</code>：Monad的单步选择与<code>greedy_step</code>等价；</li>
+<li><code>Hoare_list_iter_state</code>：Monad的列表迭代与<code>greedy_iter_state</code>等价；</li>
+<li>结合上述两点，Monad算法输出与纯函数贪心解完全一致。</li>
+</ol>
+<h2 id="七-总结">七、总结 </h2>
+<h3 id="71-核心结论">7.1 核心结论 </h3>
+<ol>
+<li><strong>最大数量正确性</strong>：贪心算法输出的区间数量是所有可行解的最大值，依赖右端点递增的输入特性和归纳法证明；</li>
+<li><strong>最优方案正确性</strong>：贪心解本身是合法的最优解，且算法的Monad实现与纯函数贪心解等价；</li>
+<li><strong>字典序最小性</strong>：贪心解的区间编号索引序列是所有最优解中字典序最小的，保证了选择策略的“最左”特性。</li>
+</ol>
+<h3 id="72-关键技术点">7.2 关键技术点 </h3>
+<ol>
+<li>用<code>is_subsequence</code>刻画区间选择的合法性，保证解来自原序列；</li>
+<li>用<code>non_overlap_from</code>严格定义区间不交约束（严格大于保证闭区间不交）；</li>
+<li>用索引序列和字典序定义“最小”，将区间选择的字典序转化为整数序列的比较；</li>
+<li>基于Hoare逻辑连接Monad程序与纯函数，完成算法实现的正确性证明。</li>
+</ol>
+<h3 id="73-扩展说明">7.3 扩展说明 </h3>
+<ul>
+<li>算法的输入前提（右端点递增）是贪心策略有效的核心，若输入无序需先排序；</li>
+<li>闭区间的严格不交约束（<code>left &gt; 前一区间right</code>）避免了端点重合的情况，若允许端点重合可调整为<code>left &gt;= 前一区间right</code>；</li>
+<li>字典序最小性保证了贪心策略的“贪心选择”特性：每次选择最早结束的区间，从而保留更多后续选择空间。</li>
+</ul>
+<h3 id="74-引理体系总结">7.4 引理体系总结 </h3>
+<table>
+<thead>
+<tr>
+<th>证明档位</th>
+<th>核心引理分类</th>
+<th>核心作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第二档（最大数量）</td>
+<td>子序列性质+右端点有序+贪心列表基础</td>
+<td>证明贪心解长度是所有合法解的最大值</td>
+</tr>
+<tr>
+<td>第三档（最优方案）</td>
+<td>Monad等价性+贪心解合法性</td>
+<td>证明Monad算法输出的具体区间集合是最优解</td>
+</tr>
+<tr>
+<td>第四档（字典序最小）</td>
+<td>字典序性质+贪心索引序列性质+索引偏移</td>
+<td>证明贪心解是所有最优解中字典序最小的</td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
